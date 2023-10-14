@@ -37,6 +37,19 @@
                 }) %>
             </span>
 
+            <% if (ctx.enableSafety) { %>
+                <div class='all-safety safety'>
+                    <% for (let safety of ['safe', 'sketchy', 'unsafe']) { %>
+                        <%= ctx.makeRadio({
+                            name: 'all-safety',
+                            value: safety,
+                            text: safety[0].toUpperCase() + safety.substr(1),
+                            selectedValue: 'safe'
+                        }) %>
+                    <% } %>
+                </div>
+            <% } %>
+
             <input type='button' value='Cancel' class='cancel'/>
         </div>
 

@@ -151,7 +151,7 @@ class PostUploadView extends events.EventTarget {
         this._ctx = ctx;
         this._hostNode = document.getElementById("content-holder");
 
-        views.replaceContent(this._hostNode, template());
+        views.replaceContent(this._hostNode, template(this._ctx));
         views.syncScrollPosition();
 
         this._cancelButtonNode.disabled = true;
@@ -196,6 +196,19 @@ class PostUploadView extends events.EventTarget {
                 }
             }
         });
+
+        this._uploadAllSafetyRadios.forEach(i => i.addEventListener("change", (e) => {
+            if (!e.target.checked) {
+                return;
+            }
+            let targetValue = e.target.value;
+            for (let uploadable of this._uploadables) {
+                const rowNode = uploadable.rowNode;
+                rowNode.querySelectorAll(`form [name="safety-${uploadable.key}"]`).forEach(i => {
+                    i.checked = i.value === targetValue;
+                });
+            }
+        }));
     }
 
     enableForm() {
@@ -375,9 +388,9 @@ class PostUploadView extends events.EventTarget {
                     uploadables: this._uploadables,
                     skipDuplicates: this._skipDuplicatesCheckboxNode.checked,
                     alwaysUploadSimilar:
-                        this._alwaysUploadSimilarCheckboxNode.checked,
+                    this._alwaysUploadSimilarCheckboxNode.checked,
                     pauseRemainOnError:
-                        this._pauseRemainOnErrorCheckboxNode.checked,
+                    this._pauseRemainOnErrorCheckboxNode.checked,
                 },
             })
         );
@@ -456,6 +469,12 @@ class PostUploadView extends events.EventTarget {
     get _uploadAllAnonymouslyCheckboxNode() {
         return this._hostNode.querySelector(
             "form [name=upload-all-anonymously]"
+        );
+    }
+
+    get _uploadAllSafetyRadios() {
+        return this._hostNode.querySelectorAll(
+            "form [name=all-safety]"
         );
     }
 
