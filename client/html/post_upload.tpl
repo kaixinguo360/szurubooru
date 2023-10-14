@@ -29,6 +29,14 @@
                 }) %>
             </span>
 
+            <span class='upload-all-anonymously'>
+                <%= ctx.makeCheckbox({
+                    text: 'Upload anonymously',
+                    name: 'upload-all-anonymously',
+                    checked: false,
+                }) %>
+            </span>
+
             <input type='button' value='Cancel' class='cancel'/>
         </div>
 

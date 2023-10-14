@@ -185,6 +185,17 @@ class PostUploadView extends events.EventTarget {
             this._evtFormSubmit(e)
         );
         this._formNode.classList.add("inactive");
+
+        this._uploadAllAnonymouslyCheckboxNode.addEventListener("change", (e) => {
+            let targetValue = e.target.checked;
+            for (let uploadable of this._uploadables) {
+                const rowNode = uploadable.rowNode;
+                const anonymousNode = rowNode.querySelector(".anonymous input");
+                if (anonymousNode) {
+                    anonymousNode.checked = targetValue;
+                }
+            }
+        });
     }
 
     enableForm() {
@@ -228,6 +239,7 @@ class PostUploadView extends events.EventTarget {
                 duplicatesFound++;
                 continue;
             }
+            uploadable.anonymous = this._uploadAllAnonymouslyCheckboxNode.checked;
             this._uploadables.push(uploadable);
             this._emit("change");
             this._renderRowNode(uploadable);
@@ -438,6 +450,12 @@ class PostUploadView extends events.EventTarget {
     get _pauseRemainOnErrorCheckboxNode() {
         return this._hostNode.querySelector(
             "form [name=pause-remain-on-error]"
+        );
+    }
+
+    get _uploadAllAnonymouslyCheckboxNode() {
+        return this._hostNode.querySelector(
+            "form [name=upload-all-anonymously]"
         );
     }
 
