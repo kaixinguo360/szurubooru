@@ -162,7 +162,8 @@ class PostMainView {
 
         this.commentListControl = new CommentListControl(
             commentsContainerNode,
-            comments
+            comments,
+            true
         );
     }
 }
